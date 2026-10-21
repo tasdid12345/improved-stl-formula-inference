@@ -1,0 +1,27 @@
+{
+  "question": "Can a class-balanced, CV-tuned gradient-boosting model that uses STL-style window features match or beat a neural sequence baseline at labelling signals with a known temporal logic formula, and does it do so more stably across seeds?",
+  "method": "Seeded random-walk signals (length 100) labelled by the fixed STL formula 'eventually in [0,20] x>0.6 and always in [0,50] x<0.95'. Per seed: one stratified train/test split; CV grid search on train only; test scored once.",
+  "dataset": {
+    "name": "Simulated random-walk signals with exact STL labels",
+    "source_url": "numpy seeded simulation (no download)",
+    "n_rows": 3000,
+    "n_train": 2250,
+    "n_test": 750,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "test accuracy",
+  "higher_is_better": true,
+  "baseline": "sklearn MLPClassifier on the raw 100-point signal (StandardScaler), grid over learning rate and hidden size chosen by 3-fold CV; stands in for the paper's recurrent network.",
+  "improved": "Class-balanced LightGBM on sliding-window max/min/mean and threshold-crossing-time features plus formula-horizon prefix extrema; grid over num_leaves and learning rate chosen by 3-fold CV.",
+  "metrics": {
+    "baseline_score": 0.9275555555555556,
+    "improved_score": 0.9995555555555556,
+    "improvement": 0.07200000000000006,
+    "baseline_score_std": 0.012896549447597272,
+    "improved_score_std": 0.0006285393610546921,
+    "baseline_f1": 0.9275290298249598,
+    "improved_f1": 0.9995543505193599
+  },
+  "notes": "Simulated data only, so results do not transfer to the paper's own benchmark. Only 3 seeds and small grids; std is across seeds. The formula is fixed and known, which favours hand-crafted window features. Macro-F1 is a secondary metric. Per-seed positive rate is printed in the log."
+}
